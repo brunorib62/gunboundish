@@ -1,30 +1,42 @@
 class Tank {
-    constructor() {
+    constructor(posX, posY) {
         this.tankImage = loadImage('./assets/tank-80x80.png');
         this.cannon = loadImage('./assets/pipe.png');
         this.pos = {
-            x: 40,
-            y: 40
+            x: posX,
+            y: posY
         };
 
         this.offset = {
             x:35,
             y:8
         }
+        this.cannonBalls = [];
         this.direction = 0;
         angleMode(DEGREES);
     }
 
     draw() {
+        for (let i = this.cannonBalls.length - 1; i >= 0; i--) {
+            if (!this.cannonBalls[i].draw()) {
+                this.cannonBalls.splice(i, 1);
+            }
+        }
+
         this.positionTank();
         this.positionCannon();
+        strokeWeight(10);
     }
 
     positionTank(){
-        strokeWeight(10); // Make the points 10 pixels in size
-        point(this.pos.x + this.offset.x, this.pos.y + this.offset.y);
-
         image(this.tankImage, this.pos.x, this.pos.y);
+    }
+
+    shoot(){
+        this.cannonBalls.push(new CannonBall({
+            x: this.pos.x + this.offset.x,
+            y: this.pos.y + this.offset.y
+        }, this.direction));
     }
 
     positionCannon(){
@@ -32,8 +44,8 @@ class Tank {
         translate(this.pos.x + this.offset.x, this.pos.y + this.offset.y);
         rotate(a);
 
-        console.log(a);
         image(this.cannon, 0, -6);
+        this.direction = a ;
     }
 
     move(x) {

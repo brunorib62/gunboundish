@@ -1,17 +1,18 @@
 let tank;
-let ball;
 function preLoad() {
 }
 
 function setup() {
     createCanvas(windowWidth - 100, windowHeight - 100);
-    frameRate(120)
-    tank = new Tank();
+    frameRate(60)
+    tank = new Tank(50, 755);
 }
 
 function draw() {
     clear();
-    background(51);
+    background(100);
+    line(0, 800, windowWidth, 800);
+
 
     if (keyIsDown(LEFT_ARROW)) {
         tank.move(-5);
@@ -23,23 +24,10 @@ function draw() {
     tank.draw();
 }
 
-// function mouseClicked() {
-//     ball.addRandomForce();
-// }
 
-function keyPressed() {
-    if (keyCode === LEFT_ARROW) {
-        value = 255;
-    } else if (keyCode === RIGHT_ARROW) {
-        value = 0;
-    }
-}
 
 let mousePos = {};
 function mousePressed(){
-    tank.aim(3.14 / 1);
+    tank.shoot();
 }
 
-function mouseReleased(){
-    // ball.addMouseForce(mouseX - mousePos.x, mouseY - mousePos.y);
-}

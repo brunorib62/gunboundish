@@ -1,11 +1,18 @@
-class Ball {
-    constructor() {
-        this.img = loadImage('./assets/ball.png');
-        this.velocity = new Victor(5, 0);
-        this.pos = {
-            x: 0,
-            y: 0
-        };
+class CannonBall {
+    constructor(pos, direction) {
+        // this.img = loadImage('./assets/ball.png');
+        this.initialForce = 20;
+
+        console.log(direction,
+            'X : ' + Math.cos(direction * (Math.PI/180)),
+            'Y : ' + Math.sin(direction * (Math.PI/180)));
+
+        this.velocity = new Victor(
+            Math.cos(direction * (Math.PI/180)) * this.initialForce,
+            Math.sin(direction * (Math.PI/180)) * this.initialForce
+        );
+
+        this.pos = JSON.parse(JSON.stringify(pos));
 
         this.border = {
             x: {
@@ -14,11 +21,12 @@ class Ball {
             },
             y: {
                 min: 0,
-                max: windowHeight - 100
+                max: windowHeight - 250
             }
-        }
+        };
 
         this.inverted = 0;
+        this.ttl = 5;
     }
 
     addGravity() {
@@ -29,22 +37,7 @@ class Ball {
         this.velocity = this.velocity.multiply(Victor(x, y));
     }
 
-    addMouseForce(x, y) {
-        this.velocity = this.velocity.add(Victor(x * 0.05, y * 0.05));
-    }
-
-    addRandomForce() {
-        const maxX = 25;
-        const maxY = 25;
-
-        const randomX = Math.random() * maxX;
-        const randomY = Math.random() * maxY;
-        this.velocity = this.velocity.add(Victor(randomX, randomY))
-    }
-
-
     move() {
-
         this.pos.x += this.velocity.x;
         this.pos.y += this.velocity.y;
 
@@ -56,18 +49,24 @@ class Ball {
                 this.velocity.invertX();
                 this.addResistance(0.7, 1);
                 this.inverted = 5;
+                this.ttl--;
             }
 
             if (this.pos.y > this.border.y.max || this.pos.y < this.border.y.min) {
                 this.velocity.invertY();
                 this.inverted = 5;
+                this.ttl--;
             }
         }
         this.inverted--;
     }
 
     draw() {
-        image(this.img, this.pos.x, this.pos.y);
+        this.move();
+        point(this.pos.x, this.pos.y);
+        if (this.ttl < 0) {
+            return false;
+        }
+        return true;
     }
-
 }
