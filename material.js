@@ -46,9 +46,12 @@ class Material {
 
             if (this.pos.y > this.border.y.max || this.pos.y < this.border.y.min) {
                 this.velocity.invertY();
+                this.addResistance(1, 0.9);
+                // if (this.velocity.y < 0.5) {
+                //     this.velocity.y = 0;
+                // }
                 this.inverted = 5;
                 hitAWall = true;
-
             }
         }
         this.inverted--;

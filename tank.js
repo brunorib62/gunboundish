@@ -21,10 +21,14 @@ class Tank extends Material {
     }
 
     draw() {
+
+        // this.addGravity();
+        this.addResistance(0.8, 0.9);
+        this.checkBorder();
+
+        console.log('Calculate velocity ' + this.velocity.y);
         this.pos.x += this.velocity.x;
         this.pos.y += this.velocity.y;
-        this.addResistance(0.8, 1);
-        this.checkBorder();
 
         for (let i = this.cannonBalls.length - 1; i >= 0; i--) {
             if (!this.cannonBalls[i].draw()) {
@@ -50,7 +54,7 @@ class Tank extends Material {
             Math.sin(this.inclination * (Math.PI / 180)) * force
         ));
 
-        this.addPush(Math.cos(this.inclination * (Math.PI / 180)) * -1, 0, force);
+        this.addPush(Math.cos(this.inclination * (Math.PI / 180)) * -1, 0, force*0.5);
     }
 
     positionCannon() {
